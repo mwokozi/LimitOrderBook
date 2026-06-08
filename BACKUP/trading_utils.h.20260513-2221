@@ -1,0 +1,52 @@
+#pragma once
+#include <string>
+
+#ifndef TRADING_UTILS 
+
+#define TRADING_UTILS
+
+
+namespace trading { 
+
+
+class Products {
+
+	std::string product_name;
+
+	long int product_id; 
+
+protected: 
+	long int get_product_id () {
+		return product_id;
+
+};
+	std::string get_product_name(){
+		return product_name; 
+};
+	void set_product_name( std::string name ) {
+		product_name = name;
+};
+};
+class Clients {
+
+	std::string client_name; 
+	long int client_id;
+protected:
+       std::string get_client_name(){
+                return client_name; 
+};
+        void set_client_name( std::string name ) {
+                client_name = name;
+};
+
+};
+
+
+class Order :protected Products, private Clients {
+
+};  
+
+
+}
+
+#endif /* TRADING_UTILS*/ 
