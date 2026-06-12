@@ -1,7 +1,19 @@
 
-#include <ctime>
-#include <iostream> 
+
+
+
+
+
+#pragma once
 #include <string>
+#include <ctime>
+#include <unordered_map>
+#include <vector>
+#ifndef TRADING_UTILS 
+
+
+
+
 
 namespace trading { 
 
@@ -59,22 +71,51 @@ namespace trading {
 			Client client;
 			Product product;
 			std::time_t exec_time;
-			unsigned long quantity; 
+			unsigned long quantity;
+		
+		protected:
+			bool is_filled; 
+			bool partial_fill; 
+			unsigned int unfilled_quantity;
+			std::time_t fill_time; 
 		public:
 			Order ( unsigned long  id,  const Client& client , const Product& product, buy_sell_enum side, ccy_code_enum ccy, double Price, std::time_t exec_time, unsigned long quantity )  ;
+			buy_sell_enum get_side() const ;
+			double get_price() const ;
+			unsigned long get_quantity() const;
+			unsigned long get_unfilled_quantity () const; 			
+			std::time_t get_fill_time() const; 
+			std::time_t queued_time() const; 
+			
+			
+			void set_unfilled_quantity ( unsigned long fill ) ; 
+			void fill() ; 	
+
+ 
 			bool operator<( const Order& other_order ) const  ;
 			bool operator==( const Order& other_order ) const;
 			bool operator>( const Order& other_order ) const; 
-			
-	};		
-
-	struct  limitOrderQueues  { 
-
-		static volatile std::vector<Order> BuyQueue;
-		static volatile std::vector<Order> SellQueue; 
-		static void place_order( const Order& ord ) ;
-		static void cancel_order ( const Order& ord ) ; 
-		static void fill_matching_orders () ; 
-	};
+			void place_order( ) ;
+                	void cancel_order ( ) ;
 	
-} 
+
+};		
+
+	struct  LimitOrderQueues: protected Order  { 
+		using ProductID = unsigned int; 
+		static std::unordered_map<ProductID,std::vector<Order>> BuyQueue;
+		static std::unordered_map<ProductID,std::vector<Order>> SellQueue;
+		static void print_live_orders( const Product& prod ) ;
+		static void fill_matching_orders ( Product& prod ) ;			
+	};
+
+
+class OrderMatchRecord { 
+
+
+
+	
+};
+
+
+};

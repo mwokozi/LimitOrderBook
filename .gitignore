@@ -70,4 +70,5 @@ Testing/
 
 #BACKUP added by me 
 BACKUP/
-
+backup.sh
+LimitOrder*
